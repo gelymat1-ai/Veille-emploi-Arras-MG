@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veille emploi médico-social — Arras 40 km</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Icônes Tabler -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+</head>
+<body>
+
+  <header class="hdr">
+    <div class="hdr-left">
+      <h1><i class="ti ti-briefcase"></i> Veille emploi médico-social — Arras</h1>
+      <p>API France Travail · Emploi public · Associations · 40 km · Profil cadre dirigeant</p>
+    </div>
+    <nav class="hdr-nav">
+      <button class="nav-btn active" onclick="showPanel('offres', this)"><i class="ti ti-search"></i> Offres</button>
+      <button class="nav-btn" onclick="showPanel('lettre', this)"><i class="ti ti-mail"></i> Lettre</button>
+      <button class="nav-btn" onclick="showPanel('cv', this)"><i class="ti ti-id"></i> CV</button>
+      <button class="nav-btn" onclick="showPanel('sources', this)"><i class="ti ti-database"></i> Sources</button>
+    </nav>
+  </header>
+
+  <!-- ═══════════════════════════════════════════ PANEL OFFRES -->
+  <section id="panel-offres" class="panel active">
+
+    <div class="status-bar">
+      <div class="dot" id="dot"></div>
+      <span class="stext" id="stext">Prêt. Configurez les filtres puis cliquez sur "Lancer la veille".</span>
+      <div class="spin" id="spin"></div>
+    </div>
+
+    <div id="alertBox"></div>
+
+    <div class="row2">
+      <div class="fg">
+        <label>Type de poste</label>
+        <select id="selPoste">
+          <option value="directeur">Directeur / Directrice</option>
+          <option value="chef" selected>Chef de service</option>
+          <option value="coordo">Coordinateur de projet</option>
+          <option value="responsable">Responsable développement</option>
+          <option value="charge">Chargé de mission</option>
+          <option value="all">Tous profils cadres</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Secteur</label>
+        <select id="selSecteur">
+          <option value="ms" selected>Médico-social (global)</option>
+          <option value="dom">Aide et soins à domicile</option>
+          <option value="hand">Handicap / Inclusion</option>
+          <option value="prev">Prévention / Promotion santé</option>
+          <option value="ehp">EHPAD / Personnes âgées</option>
+          <option value="col">Collectivités territoriales</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="chips" id="filterChips">
+      <span class="chip on" data-k="ft">France Travail</span>
+      <span class="chip on" data-k="fp">Emploi public</span>
+      <span class="chip on" data-k="una">Réseau UNA</span>
+      <span class="chip on" data-k="apei">UNAPEI</span>
+      <span class="chip on" data-k="cdg">CDG62</span>
+      <span class="chip on" data-k="fehap">FEHAP/NEXEM</span>
+    </div>
+
+    <div class="btns">
+      <button class="btn go" id="btnLancer" onclick="lancerRecherche()"><i class="ti ti-search"></i> Lancer la veille</button>
+      <button class="btn" onclick="exportSynthese()"><i class="ti ti-file-export"></i> Synthèse Claude</button>
+      <button class="btn" onclick="showPanel('lettre', document.querySelectorAll('.nav-btn')[1])"><i class="ti ti-mail"></i> Générer une lettre</button>
+      <button class="btn" onclick="showPanel('cv', document.querySelectorAll('.nav-btn')[2])"><i class="ti ti-id"></i> Adapter mon CV</button>
+    </div>
+
+    <div id="statsRow" class="stats" style="display:none">
+      <div class="stat"><div class="stat-v" id="stTotal">0</div><div class="stat-l">Offres trouvées</div></div>
+      <div class="stat"><div class="stat-v" id="stHaut">0</div><div class="stat-l">Haute compatibilité</div></div>
+      <div class="stat"><div class="stat-v" id="stCDI">0</div><div class="stat-l">CDI</div></div>
+      <div class="stat"><div class="stat-v" id="stSrc">0</div><div class="stat-l">Sources actives</div></div>
+    </div>
+
+    <div id="results">
+      <div class="empty">
+        <i class="ti ti-briefcase"></i>
+        <p>Lancez la veille pour afficher les offres correspondant à votre profil.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════ PANEL LETTRE -->
+  <section id="panel-lettre" class="panel">
+
+    <div class="status-bar">
+      <div class="dot" id="dot2"></div>
+      <span class="stext" id="stext2">Renseignez le poste ciblé et lancez la génération.</span>
+      <div class="spin" id="spin2"></div>
+    </div>
+
+    <div class="row2">
+      <div class="fg"><label>Intitulé du poste</label><input type="text" id="lPoste" placeholder="Ex : Chef de service — Pôle autonomie" /></div>
+      <div class="fg"><label>Organisation</label><input type="text" id="lOrg" placeholder="Ex : APEI du Ternois" /></div>
+    </div>
+    <div class="row2">
+      <div class="fg"><label>Lieu</label><input type="text" id="lLieu" placeholder="Ex : Arras (62)" /></div>
+      <div class="fg"><label>Type de contrat</label>
+        <select id="lContrat">
+          <option>CDI</option><option>CDD</option><option>Fonctionnaire</option><option>Contractuel FP</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg" style="margin-bottom:1rem">
+      <label>Éléments spécifiques à valoriser (optionnel)</label>
+      <textarea id="lNotes" rows="3" placeholder="Ex : expérience habitat inclusif, maîtrise SERAFIN-PH, réseau CPTS Grand Arras..."></textarea>
+    </div>
+
+    <div class="btns">
+      <button class="btn go" id="btnLettre" onclick="genLettre()"><i class="ti ti-wand"></i> Générer la lettre</button>
+      <button class="btn" onclick="copier('outLettre')"><i class="ti ti-copy"></i> Copier</button>
+      <button class="btn" onclick="telecharger('outLettre', 'lettre-motivation.txt')"><i class="ti ti-download"></i> Télécharger</button>
+    </div>
+
+    <div class="gen-label">Lettre générée</div>
+    <div class="gen-out" id="outLettre">La lettre de motivation apparaîtra ici après génération.</div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════ PANEL CV -->
+  <section id="panel-cv" class="panel">
+
+    <div class="status-bar">
+      <div class="dot" id="dot3"></div>
+      <span class="stext" id="stext3">Sélectionnez le poste ciblé et générez les recommandations.</span>
+      <div class="spin" id="spin3"></div>
+    </div>
+
+    <div class="row3">
+      <div class="fg"><label>Poste visé</label>
+        <select id="cvPoste">
+          <option>Chef de service</option><option>Directeur adjoint</option>
+          <option>Coordinateur de projet</option><option>Responsable développement</option>
+          <option>Chargé de mission</option><option>Directeur CCAS</option>
+        </select>
+      </div>
+      <div class="fg"><label>Secteur cible</label>
+        <select id="cvSecteur">
+          <option>Médico-social</option><option>Aide à domicile</option>
+          <option>Handicap</option><option>Prévention santé</option><option>Collectivités</option>
+        </select>
+      </div>
+      <div class="fg"><label>Convention collective</label>
+        <select id="cvConv">
+          <option>BAD (UNA/ADMR)</option><option>FEHAP / NEXEM</option>
+          <option>Fonction publique</option><option>CHRS / Accueil</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg" style="margin-bottom:1rem">
+      <label>Compétences spécifiques à mettre en avant</label>
+      <textarea id="cvNotes" rows="3" placeholder="Ex : pilotage CPOM, habitat inclusif, management 7 chefs de service..."></textarea>
+    </div>
+
+    <div class="btns">
+      <button class="btn go" id="btnCV" onclick="genCV()"><i class="ti ti-wand"></i> Adapter mon CV</button>
+      <button class="btn" onclick="copier('outCV')"><i class="ti ti-copy"></i> Copier</button>
+      <button class="btn" onclick="telecharger('outCV', 'adaptation-cv.txt')"><i class="ti ti-download"></i> Télécharger</button>
+    </div>
+
+    <div class="gen-label">Recommandations d'adaptation</div>
+    <div class="gen-out" id="outCV">Les recommandations apparaîtront ici après génération.</div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════ PANEL SOURCES -->
+  <section id="panel-sources" class="panel">
+    <h2 class="section-title">Sources interrogées</h2>
+    <div class="sgrid">
+      <div class="sc"><div class="sn"><i class="ti ti-building-community"></i> France Travail</div><div class="sd">API officielle — temps réel</div><a class="sl" href="https://candidat.francetravail.fr/offres/recherche?motsCles=chef+service+medico+social&lieux=62&rayonRecherche=40" target="_blank">Recherche directe <i class="ti ti-external-link"></i></a></div>
+      <div class="sc"><div class="sn"><i class="ti ti-landmark"></i> Emploi public</div><div class="sd">FPE · FPT · FPH</div><a class="sl" href="https://www.place-emploi-public.gouv.fr/offre-de-emploi/liste-des-offres?keyword=chef+service+medico+social&localisation=62" target="_blank">Recherche directe <i class="ti ti-external-link"></i></a></div>
+      <div class="sc"><div class="sn"><i class="ti ti-users"></i> Réseau UNA</div><div class="sd">Aide à domicile — cadres</div><a class="sl" href="https://www.una.fr/offres-d-emploi" target="_blank">Offres UNA <i class="ti ti-external-link"></i></a></div>
+      <div class="sc"><div class="sn"><i class="ti ti-accessible"></i> UNAPEI</div><div class="sd">Handicap — structures locales</div><a class="sl" href="https://www.unapei.org/nos-offres-demploi/" target="_blank">Offres UNAPEI <i class="ti ti-external-link"></i></a></div>
+      <div class="sc"><div class="sn"><i class="ti ti-building"></i> CDG62</div><div class="sd">Collectivités — Pas-de-Calais</div><a class="sl" href="https://www.cdg62.fr/offres-demploi" target="_blank">Offres CDG62 <i class="ti ti-external-link"></i></a></div>
+      <div class="sc"><div class="sn"><i class="ti ti-heart"></i> FEHAP / NEXEM</div><div class="sd">Fédérations associatives</div><a class="sl" href="https://www.nexem.fr/offres-emploi" target="_blank">Offres NEXEM <i class="ti ti-external-link"></i></a></div>
+      <div class="sc"><div class="sn"><i class="ti ti-brand-linkedin"></i> LinkedIn</div><div class="sd">Offres sectorielles</div><a class="sl" href="https://www.linkedin.com/jobs/search/?keywords=chef+de+service+m%C3%A9dico-social&location=Arras%2C+Hauts-de-France&distance=40" target="_blank">Recherche LinkedIn <i class="ti ti-external-link"></i></a></div>
+      <div class="sc"><div class="sn"><i class="ti ti-network"></i> Indeed</div><div class="sd">Agrégateur multi-sources</div><a class="sl" href="https://fr.indeed.com/jobs?q=chef+de+service+medico+social&l=Arras%2C+62&radius=40" target="_blank">Recherche Indeed <i class="ti ti-external-link"></i></a></div>
+    </div>
+    <div class="info-box" style="margin-top:1.5rem">
+      <strong>Fréquence recommandée :</strong> lancer la veille chaque matin (nouvelles offres France Travail publiées entre 6h et 9h). Les offres associatives se mettent à jour hebdomadairement — consultez les liens directs en complément.
+    </div>
+  </section>
+
+  <script src="config.js"></script>
+  <script src="agent.js"></script>
+
+</body>
+</html>
