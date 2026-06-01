@@ -176,19 +176,12 @@
 
   <!-- ═══════════════════════════════════════════ PANEL SOURCES -->
   <section id="panel-sources" class="panel">
-    <h2 class="section-title">Sources interrogées</h2>
-    <div class="sgrid">
-      <div class="sc"><div class="sn"><i class="ti ti-building-community"></i> France Travail</div><div class="sd">API officielle — temps réel</div><a class="sl" href="https://candidat.francetravail.fr/offres/recherche?motsCles=chef+service+medico+social&lieux=62&rayonRecherche=40" target="_blank">Recherche directe <i class="ti ti-external-link"></i></a></div>
-      <div class="sc"><div class="sn"><i class="ti ti-landmark"></i> Emploi public</div><div class="sd">FPE · FPT · FPH</div><a class="sl" href="https://www.place-emploi-public.gouv.fr/offre-de-emploi/liste-des-offres?keyword=chef+service+medico+social&localisation=62" target="_blank">Recherche directe <i class="ti ti-external-link"></i></a></div>
-      <div class="sc"><div class="sn"><i class="ti ti-users"></i> Réseau UNA</div><div class="sd">Aide à domicile — cadres</div><a class="sl" href="https://www.una.fr/offres-d-emploi" target="_blank">Offres UNA <i class="ti ti-external-link"></i></a></div>
-      <div class="sc"><div class="sn"><i class="ti ti-accessible"></i> UNAPEI</div><div class="sd">Handicap — structures locales</div><a class="sl" href="https://www.unapei.org/nos-offres-demploi/" target="_blank">Offres UNAPEI <i class="ti ti-external-link"></i></a></div>
-      <div class="sc"><div class="sn"><i class="ti ti-building"></i> CDG62</div><div class="sd">Collectivités — Pas-de-Calais</div><a class="sl" href="https://www.cdg62.fr/offres-demploi" target="_blank">Offres CDG62 <i class="ti ti-external-link"></i></a></div>
-      <div class="sc"><div class="sn"><i class="ti ti-heart"></i> FEHAP / NEXEM</div><div class="sd">Fédérations associatives</div><a class="sl" href="https://www.nexem.fr/offres-emploi" target="_blank">Offres NEXEM <i class="ti ti-external-link"></i></a></div>
-      <div class="sc"><div class="sn"><i class="ti ti-brand-linkedin"></i> LinkedIn</div><div class="sd">Offres sectorielles</div><a class="sl" href="https://www.linkedin.com/jobs/search/?keywords=chef+de+service+m%C3%A9dico-social&location=Arras%2C+Hauts-de-France&distance=40" target="_blank">Recherche LinkedIn <i class="ti ti-external-link"></i></a></div>
-      <div class="sc"><div class="sn"><i class="ti ti-network"></i> Indeed</div><div class="sd">Agrégateur multi-sources</div><a class="sl" href="https://fr.indeed.com/jobs?q=chef+de+service+medico+social&l=Arras%2C+62&radius=40" target="_blank">Recherche Indeed <i class="ti ti-external-link"></i></a></div>
+    <h2 class="section-title">Sources interrogées — liens de recherche directs</h2>
+    <div class="sgrid" id="sourcesContainer">
+      <!-- Rempli dynamiquement par renderSourcesPanel() dans agent.js -->
     </div>
     <div class="info-box" style="margin-top:1.5rem">
-      <strong>Fréquence recommandée :</strong> lancer la veille chaque matin (nouvelles offres France Travail publiées entre 6h et 9h). Les offres associatives se mettent à jour hebdomadairement — consultez les liens directs en complément.
+      <strong>Fréquence recommandée :</strong> lancer la veille chaque matin (nouvelles offres France Travail publiées entre 6h et 9h). Pour les autres sources, les liens ci-dessus ouvrent directement les recherches filtrées — à consulter une fois par semaine.
     </div>
   </section>
 
