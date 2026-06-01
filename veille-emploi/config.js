@@ -13,7 +13,7 @@ const CONFIG = {
 
   // ── Anthropic Claude API (pour génération lettre et CV) ───────
   // Créez une clé sur https://console.anthropic.com → API Keys
-  ANTHROPIC_API_KEY: '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',
+  ANTHROPIC_API_KEY: 'VOTRE_CLE_ANTHROPIC_ICI',
 
   // ── Paramètres de recherche ───────────────────────────────────
   COMMUNE_INSEE:  '62041',   // Code INSEE d'Arras
